@@ -16,6 +16,6 @@ MongoClient.connect(connectionURL, { 'useNewUrlParser': true, 'useUnifiedTopolog
 })
 
 
-
 // Start MongoDB serveur
+//cd ~
 // /Users/mathieudrapala/mongodb/bin/mongod --dbpath=/Users/mathieudrapala/mongodb-data
