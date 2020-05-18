@@ -46,7 +46,7 @@ app.get('/users/:id', async (req, res) => {
     }
 })
 
-//updates
+//Updates
 app.patch('/users/:id', async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'email', 'password', 'age']
@@ -82,8 +82,23 @@ app.post('/tasks', async (req, res) => {
     }
 })
 
+//Delete user
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id)
 
-//get  all tasks
+        if(!user) {
+            return res.status(404).send()
+        }
+
+        res.send(user)
+    }catch (e) {
+        res.status(500).send()
+    }
+})
+
+
+//Get  all tasks
 app.get('/tasks', async (req, res) => {
     try {
         const tasks = await Task.find({})
@@ -93,7 +108,7 @@ app.get('/tasks', async (req, res) => {
     }
 })
 
-//get tasks by id
+//Get tasks by id
 app.get('/tasks/:id', async (req, res) => {
     const _id = req.params.id
 
@@ -128,6 +143,21 @@ app.patch('/tasks/:id', async (req, res) => {
         res.send(task)
     } catch (e) {
         res.status(400).send(e)
+    }
+})
+
+//Delete task
+app.delete('/tasks/:id', async (req, res) => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id)
+
+        if(!task) {
+            return res.status(404).send()
+        }
+
+        res.send(task)
+    }catch (e) {
+        res.status(500).send()
     }
 })
 
