@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const auth = require('../middleware/auth')
 const router = new express.Router()
 
 //Add users
@@ -15,25 +16,9 @@ router.post('/users', async (req, res) => {
     }
 })
 
-
-router.post('/users/login', async (req, res) => {
-    try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
-        const token = await user.generateAuthToken()
-        res.send({ user, token })
-    } catch (e) {
-        res.status(400).send(e)
-    }
-})
-
 //Get all users
-router.get('/users', async (req, res) => {
-    try {
-        const users = await User.find({})
-        res.send(users)
-    } catch (e) {
-        res.status(500).send()
-    }
+router.get('/users/me', auth, async (req, res) => {
+    res.send(req.user)
 })
 
 //Get user id
@@ -92,5 +77,16 @@ router.delete('/users/:id', async (req, res) => {
         res.status(500).send()
     }
 })
+
+router.post('/users/login', async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const token = await user.generateAuthToken()
+        res.send({ user, token })
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
+
 
 module.exports = router
